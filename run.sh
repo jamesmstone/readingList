@@ -56,7 +56,23 @@ publishDB() {
     -v"$(pwd):/wd" \
     -w /wd \
     "$dockerDatasette" \
-    publish vercel "$db" --token "$VERCEL_TOKEN" --project=reading-list --install=datasette-vega
+    publish vercel \
+    "$db" \
+    "--project=reading-list" \
+    --generate-vercel-json > vercel.json
+  sed -i 's/@vercel\/python@3\.0\.7/@vercel\/python@4.5.1/g' vercel.json
+  docker run \
+    -v"$(pwd):/wd" \
+    -w /wd \
+    "$dockerDatasette" \
+    publish vercel \
+    "$db" \
+    --token "$VERCEL_TOKEN" \
+    "--project=reading-list" \
+    --vercel-json=vercel.json \
+    --setting sql_time_limit_ms 3500 \
+    --install=datasette-vega \
+    --install=datasette-cluster-map
 }
 
 run() {
