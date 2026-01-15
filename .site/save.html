@@ -1,3 +1,16 @@
+<style>
+  :root {
+    color-scheme: light dark;
+  }
+  body {
+    background-color: white;
+  }
+  @media (prefers-color-scheme: dark) {
+    body {
+      background-color: black;
+    }
+  }
+</style>
 <script>
   const params = new URLSearchParams(window.location.search);
   const token = params.get("token");
