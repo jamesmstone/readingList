@@ -1,0 +1,37 @@
+<style>
+  :root {
+    color-scheme: light dark;
+  }
+  body {
+    background-color: white;
+  }
+  @media (prefers-color-scheme: dark) {
+    body {
+      background-color: black;
+    }
+  }
+</style>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get("token");
+  const payload = {
+    event_type: "rl-append",
+    client_payload: {
+      title: params.get("title"),
+      url: params.get("url"),
+      description: params.get("description"),
+      image: params.get("image"),
+    },
+  };
+  fetch("https://api.github.com/repos/jamesmstone/readingList/dispatches", {
+    body: JSON.stringify(payload),
+    headers: {
+      Accept: "application/vnd.github+json",
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    method: "POST",
+  }).then(() => {
+    window.location.href = params.get("nexturl");
+  });
+</script>
