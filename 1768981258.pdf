@@ -1,0 +1,825 @@
+%PDF-1.4
+%׃כיב
+1 0 obj
+<</Title (Waku, the minimal React framework)
+/Creator (Chromium)
+/Producer (Skia/PDF m143)
+/CreationDate (D:20260121074059+00'00')
+/ModDate (D:20260121074059+00'00')>>
+endobj
+3 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+5 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+7 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+9 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+11 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+13 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+15 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+17 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+19 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+21 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+23 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+25 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+27 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+29 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+31 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+33 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+35 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+37 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+39 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+41 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+43 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+45 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+47 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+49 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+51 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+53 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+55 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+57 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+59 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+61 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+63 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+65 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+67 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+69 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+71 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+73 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+75 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+77 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+79 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+81 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+83 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+85 0 obj
+<</Length 0>> stream
+
+endstream
+endobj
+2 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 3 0 R
+/StructParents 0
+/Tabs /S
+/Parent 86 0 R>>
+endobj
+4 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 5 0 R
+/StructParents 1
+/Tabs /S
+/Parent 86 0 R>>
+endobj
+6 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 7 0 R
+/StructParents 2
+/Tabs /S
+/Parent 86 0 R>>
+endobj
+8 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 9 0 R
+/StructParents 3
+/Tabs /S
+/Parent 86 0 R>>
+endobj
+10 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 11 0 R
+/StructParents 4
+/Tabs /S
+/Parent 86 0 R>>
+endobj
+12 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 13 0 R
+/StructParents 5
+/Tabs /S
+/Parent 86 0 R>>
+endobj
+14 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 15 0 R
+/StructParents 6
+/Tabs /S
+/Parent 86 0 R>>
+endobj
+16 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 17 0 R
+/StructParents 7
+/Tabs /S
+/Parent 86 0 R>>
+endobj
+18 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 19 0 R
+/StructParents 8
+/Tabs /S
+/Parent 87 0 R>>
+endobj
+20 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 21 0 R
+/StructParents 9
+/Tabs /S
+/Parent 87 0 R>>
+endobj
+22 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 23 0 R
+/StructParents 10
+/Tabs /S
+/Parent 87 0 R>>
+endobj
+24 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 25 0 R
+/StructParents 11
+/Tabs /S
+/Parent 87 0 R>>
+endobj
+26 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 27 0 R
+/StructParents 12
+/Tabs /S
+/Parent 87 0 R>>
+endobj
+28 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 29 0 R
+/StructParents 13
+/Tabs /S
+/Parent 87 0 R>>
+endobj
+30 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 31 0 R
+/StructParents 14
+/Tabs /S
+/Parent 87 0 R>>
+endobj
+32 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 33 0 R
+/StructParents 15
+/Tabs /S
+/Parent 87 0 R>>
+endobj
+34 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 35 0 R
+/StructParents 16
+/Tabs /S
+/Parent 88 0 R>>
+endobj
+36 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 37 0 R
+/StructParents 17
+/Tabs /S
+/Parent 88 0 R>>
+endobj
+38 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 39 0 R
+/StructParents 18
+/Tabs /S
+/Parent 88 0 R>>
+endobj
+40 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 41 0 R
+/StructParents 19
+/Tabs /S
+/Parent 88 0 R>>
+endobj
+42 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 43 0 R
+/StructParents 20
+/Tabs /S
+/Parent 88 0 R>>
+endobj
+44 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 45 0 R
+/StructParents 21
+/Tabs /S
+/Parent 88 0 R>>
+endobj
+46 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 47 0 R
+/StructParents 22
+/Tabs /S
+/Parent 88 0 R>>
+endobj
+48 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 49 0 R
+/StructParents 23
+/Tabs /S
+/Parent 88 0 R>>
+endobj
+50 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 51 0 R
+/StructParents 24
+/Tabs /S
+/Parent 89 0 R>>
+endobj
+52 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 53 0 R
+/StructParents 25
+/Tabs /S
+/Parent 89 0 R>>
+endobj
+54 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 55 0 R
+/StructParents 26
+/Tabs /S
+/Parent 89 0 R>>
+endobj
+56 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 57 0 R
+/StructParents 27
+/Tabs /S
+/Parent 89 0 R>>
+endobj
+58 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 59 0 R
+/StructParents 28
+/Tabs /S
+/Parent 89 0 R>>
+endobj
+60 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 61 0 R
+/StructParents 29
+/Tabs /S
+/Parent 89 0 R>>
+endobj
+62 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 63 0 R
+/StructParents 30
+/Tabs /S
+/Parent 89 0 R>>
+endobj
+64 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 65 0 R
+/StructParents 31
+/Tabs /S
+/Parent 89 0 R>>
+endobj
+66 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 67 0 R
+/StructParents 32
+/Tabs /S
+/Parent 90 0 R>>
+endobj
+68 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 69 0 R
+/StructParents 33
+/Tabs /S
+/Parent 90 0 R>>
+endobj
+70 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 71 0 R
+/StructParents 34
+/Tabs /S
+/Parent 90 0 R>>
+endobj
+72 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 73 0 R
+/StructParents 35
+/Tabs /S
+/Parent 90 0 R>>
+endobj
+74 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 75 0 R
+/StructParents 36
+/Tabs /S
+/Parent 90 0 R>>
+endobj
+76 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 77 0 R
+/StructParents 37
+/Tabs /S
+/Parent 90 0 R>>
+endobj
+78 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 79 0 R
+/StructParents 38
+/Tabs /S
+/Parent 90 0 R>>
+endobj
+80 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 81 0 R
+/StructParents 39
+/Tabs /S
+/Parent 90 0 R>>
+endobj
+82 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 83 0 R
+/StructParents 40
+/Tabs /S
+/Parent 91 0 R>>
+endobj
+84 0 obj
+<</Type /Page
+/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]>>
+/MediaBox [0 0 612 792]
+/Contents 85 0 R
+/StructParents 41
+/Tabs /S
+/Parent 91 0 R>>
+endobj
+86 0 obj
+<</Type /Pages
+/Count 8
+/Kids [2 0 R 4 0 R 6 0 R 8 0 R 10 0 R 12 0 R 14 0 R 16 0 R]
+/Parent 92 0 R>>
+endobj
+87 0 obj
+<</Type /Pages
+/Count 8
+/Kids [18 0 R 20 0 R 22 0 R 24 0 R 26 0 R 28 0 R 30 0 R 32 0 R]
+/Parent 92 0 R>>
+endobj
+88 0 obj
+<</Type /Pages
+/Count 8
+/Kids [34 0 R 36 0 R 38 0 R 40 0 R 42 0 R 44 0 R 46 0 R 48 0 R]
+/Parent 92 0 R>>
+endobj
+89 0 obj
+<</Type /Pages
+/Count 8
+/Kids [50 0 R 52 0 R 54 0 R 56 0 R 58 0 R 60 0 R 62 0 R 64 0 R]
+/Parent 92 0 R>>
+endobj
+90 0 obj
+<</Type /Pages
+/Count 8
+/Kids [66 0 R 68 0 R 70 0 R 72 0 R 74 0 R 76 0 R 78 0 R 80 0 R]
+/Parent 92 0 R>>
+endobj
+91 0 obj
+<</Type /Pages
+/Count 2
+/Kids [82 0 R 84 0 R]
+/Parent 92 0 R>>
+endobj
+92 0 obj
+<</Type /Pages
+/Count 42
+/Kids [86 0 R 87 0 R 88 0 R 89 0 R 90 0 R 91 0 R]>>
+endobj
+93 0 obj
+<</introduction [2 0 R /XYZ 24 744 0]
+/commands [2 0 R /XYZ 24 283.5 0]
+/ [2 0 R /XYZ 0 792 0]
+/getting-started [2 0 R /XYZ 24 477 0]
+/rendering [2 0 R /XYZ 24 121.5 0]
+/client-components [4 0 R /XYZ 24 137.25 0]
+/server-components [4 0 R /XYZ 24 515.25 0]
+/shared-components [6 0 R /XYZ 24 438 0]
+/weaving-patterns [6 0 R /XYZ 24 188.25 0]
+/tl-dr [8 0 R /XYZ 24 182.25 0]
+/server-side-rendering [8 0 R /XYZ 24 288 0]
+/further-reading [10 0 R /XYZ 24 654.75 0]
+/routing [10 0 R /XYZ 24 545.25 0]
+/pages [14 0 R /XYZ 24 690 0]
+/single-routes [14 0 R /XYZ 24 576.75 0]
+/segment-routes [16 0 R /XYZ 24 690 0]
+/nested-segment-routes [20 0 R /XYZ 24 564 0]
+/catch-all-routes [22 0 R /XYZ 24 402 0]
+/group-routes [24 0 R /XYZ 24 672 0]
+/ignored-routes [28 0 R /XYZ 24 131.25 0]
+/root-layout [30 0 R /XYZ 24 159 0]
+/router-paths-type-safety [30 0 R /XYZ 24 547.5 0]
+/layouts [30 0 R /XYZ 24 272.25 0]
+/other-layouts [32 0 R /XYZ 24 72 0]
+/root-element [34 0 R /XYZ 24 351.75 0]
+/slices [36 0 R /XYZ 24 636 0]
+/creating-slices [36 0 R /XYZ 24 522.75 0]
+/using-slices [38 0 R /XYZ 24 396 0]
+/lazy-slices [40 0 R /XYZ 24 636 0]
+/navigation [42 0 R /XYZ 24 792 0]
+/use-router [42 0 R /XYZ 24 372 0]
+/router-properties [42 0 R /XYZ 24 279 0]
+/link [42 0 R /XYZ 24 735 0]
+/router-methods [44 0 R /XYZ 24 654 0]
+/error-handling [44 0 R /XYZ 24 71.25 0]
+/metadata [48 0 R /XYZ 24 630.75 0]
+/global-styles [52 0 R /XYZ 24 633 0]
+/styling [52 0 R /XYZ 24 690 0]
+/file-system [54 0 R /XYZ 24 332.25 0]
+/static-assets [54 0 R /XYZ 24 690 0]
+/server [56 0 R /XYZ 24 735 0]
+/data-fetching [56 0 R /XYZ 24 792 0]
+/client [56 0 R /XYZ 24 45.75 0]
+/api-endpoints [58 0 R /XYZ 24 620.25 0]
+/mutations [58 0 R /XYZ 24 703.5 0]
+/calling-api-routes [60 0 R /XYZ 24 427.5 0]
+/configuring-api-routes [62 0 R /XYZ 24 78 0]
+/server-actions [64 0 R /XYZ 24 405.75 0]
+/defining-and-protecting-actions [64 0 R /XYZ 24 292.5 0]
+/making-and-consuming-actions [66 0 R /XYZ 24 714 0]
+/invoking-actions [68 0 R /XYZ 24 46.5 0]
+/enhancing-actions [72 0 R /XYZ 24 438 0]
+/state-management [72 0 R /XYZ 24 276 0]
+/private [74 0 R /XYZ 24 688.5 0]
+/runtime-agnostic-recommended [74 0 R /XYZ 24 477 0]
+/environment-variables [74 0 R /XYZ 24 792 0]
+/public [74 0 R /XYZ 24 582.75 0]
+/pure-ssg-with-vercel [76 0 R /XYZ 24 237 0]
+/deployment [76 0 R /XYZ 24 695.25 0]
+/node-js [76 0 R /XYZ 24 792 0]
+/node-js-default [76 0 R /XYZ 24 638.25 0]
+/vercel [76 0 R /XYZ 24 399.75 0]
+/pure-ssg [76 0 R /XYZ 24 513 0]
+/pure-ssg-with-netlify [78 0 R /XYZ 24 509.25 0]
+/cloudflare-workers [78 0 R /XYZ 24 193.5 0]
+/netlify [78 0 R /XYZ 24 690 0]
+/deno-deploy-experimental [80 0 R /XYZ 24 528.75 0]
+/pure-ssg-with-cloudflare-workers [80 0 R /XYZ 24 792 0]
+/bun-experimental [80 0 R /XYZ 24 180 0]
+/edge [82 0 R /XYZ 24 198.75 0]
+/aws-lambda-experimental [82 0 R /XYZ 24 612 0]
+/contributing [84 0 R /XYZ 24 435 0]
+/community [84 0 R /XYZ 24 690 0]
+/roadmap [84 0 R /XYZ 24 562.5 0]>>
+endobj
+94 0 obj
+<</Type /Catalog
+/Pages 92 0 R
+/Dests 93 0 R
+/ViewerPreferences <</Type /ViewerPreferences
+/DisplayDocTitle true>>>>
+endobj
+xref
+0 95
+0000000000 65535 f 
+0000000015 00000 n 
+0000002210 00000 n 
+0000000198 00000 n 
+0000002383 00000 n 
+0000000245 00000 n 
+0000002556 00000 n 
+0000000292 00000 n 
+0000002729 00000 n 
+0000000339 00000 n 
+0000002902 00000 n 
+0000000386 00000 n 
+0000003077 00000 n 
+0000000434 00000 n 
+0000003252 00000 n 
+0000000482 00000 n 
+0000003427 00000 n 
+0000000530 00000 n 
+0000003602 00000 n 
+0000000578 00000 n 
+0000003777 00000 n 
+0000000626 00000 n 
+0000003952 00000 n 
+0000000674 00000 n 
+0000004128 00000 n 
+0000000722 00000 n 
+0000004304 00000 n 
+0000000770 00000 n 
+0000004480 00000 n 
+0000000818 00000 n 
+0000004656 00000 n 
+0000000866 00000 n 
+0000004832 00000 n 
+0000000914 00000 n 
+0000005008 00000 n 
+0000000962 00000 n 
+0000005184 00000 n 
+0000001010 00000 n 
+0000005360 00000 n 
+0000001058 00000 n 
+0000005536 00000 n 
+0000001106 00000 n 
+0000005712 00000 n 
+0000001154 00000 n 
+0000005888 00000 n 
+0000001202 00000 n 
+0000006064 00000 n 
+0000001250 00000 n 
+0000006240 00000 n 
+0000001298 00000 n 
+0000006416 00000 n 
+0000001346 00000 n 
+0000006592 00000 n 
+0000001394 00000 n 
+0000006768 00000 n 
+0000001442 00000 n 
+0000006944 00000 n 
+0000001490 00000 n 
+0000007120 00000 n 
+0000001538 00000 n 
+0000007296 00000 n 
+0000001586 00000 n 
+0000007472 00000 n 
+0000001634 00000 n 
+0000007648 00000 n 
+0000001682 00000 n 
+0000007824 00000 n 
+0000001730 00000 n 
+0000008000 00000 n 
+0000001778 00000 n 
+0000008176 00000 n 
+0000001826 00000 n 
+0000008352 00000 n 
+0000001874 00000 n 
+0000008528 00000 n 
+0000001922 00000 n 
+0000008704 00000 n 
+0000001970 00000 n 
+0000008880 00000 n 
+0000002018 00000 n 
+0000009056 00000 n 
+0000002066 00000 n 
+0000009232 00000 n 
+0000002114 00000 n 
+0000009408 00000 n 
+0000002162 00000 n 
+0000009584 00000 n 
+0000009701 00000 n 
+0000009822 00000 n 
+0000009943 00000 n 
+0000010064 00000 n 
+0000010185 00000 n 
+0000010264 00000 n 
+0000010357 00000 n 
+0000013298 00000 n 
+trailer
+<</Size 95
+/Root 94 0 R
+/Info 1 0 R>>
+startxref
+13431
+%%EOF
