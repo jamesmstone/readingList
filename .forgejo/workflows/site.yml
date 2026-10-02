@@ -1,0 +1,23 @@
+name: Publish site
+
+# read.jamesst.one serves what this publishes. It runs on every push to main
+# because an append commits a new screenshot and a regenerated index.html, and
+# the page is stale until those reach the server.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  NIX_CONFIG: "accept-flake-config = true"
+
+jobs:
+  publish:
+    runs-on: native
+    timeout-minutes: 60
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Publish screenshots and page
+        run: nix develop -c ./run.sh publish-site
