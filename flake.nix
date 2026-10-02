@@ -44,6 +44,7 @@
             git
             go
             jq
+            rsync
             shot-scraper
             sqlite-utils
           ]);
