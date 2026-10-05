@@ -106,7 +106,10 @@ func loadInputs(data any) error {
 
 // HACKER NEWS STUFF
 
-var hnHTTPClient = new(http.Client)
+// Bounded: the lookup is best-effort and its failure is already tolerated, but
+// an append runs from a systemd unit holding a lock, so it may never be the
+// thing that hangs.
+var hnHTTPClient = &http.Client{Timeout: 15 * time.Second}
 
 type hackerNewsEntry struct {
 	ObjectID string `json:"objectID"`

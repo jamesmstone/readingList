@@ -20,40 +20,232 @@
   outputs =
     inputs:
     let
-      eachSystem = inputs.nixpkgs.lib.genAttrs (import inputs.systems);
+      inherit (inputs.nixpkgs) lib;
+      eachSystem = lib.genAttrs (import inputs.systems);
       pkgsFor = eachSystem (system: import inputs.nixpkgs { inherit system; });
     in
     {
-      packages = eachSystem (system: rec {
-        readinglist = pkgsFor.${system}.callPackage ./default.nix { };
-        database = pkgsFor.${system}.callPackage ./database.nix { };
-        default = readinglist;
-      });
-
-      checks = eachSystem (system: {
-        readinglist = inputs.self.packages.${system}.readinglist;
-        database = inputs.self.packages.${system}.database;
-      });
-
-      devShells = eachSystem (system: {
-        default = pkgsFor.${system}.mkShell {
-          packages = [
-            inputs.self.packages.${system}.readinglist
-          ]
-          ++ (with pkgsFor.${system}; [
-            git
-            go
-            jq
-            rsync
-            shot-scraper
-            sqlite-utils
-          ]);
+      packages = eachSystem (
+        system:
+        let
+          pkgs = pkgsFor.${system};
+        in
+        rec {
+          readinglist = pkgs.callPackage ./default.nix { };
+          database = pkgs.callPackage ./database.nix { };
+          default = readinglist;
 
           # shot-scraper's playwright refuses to fetch its own browsers, so
-          # point it at the ones nixpkgs already built.
-          PLAYWRIGHT_BROWSERS_PATH = pkgsFor.${system}.playwright-driver.browsers;
-          PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS = "true";
-        };
-      });
+          # point it at the ones nixpkgs already built. Wrapped rather than set
+          # in the unit, so the devshell and the service shoot identically.
+          shot-scraper = pkgs.writeShellApplication {
+            name = "shot-scraper";
+            runtimeInputs = [ pkgs.shot-scraper ];
+            text = ''
+              export PLAYWRIGHT_BROWSERS_PATH=${pkgs.playwright-driver.browsers}
+              export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=true
+              exec shot-scraper "$@"
+            '';
+            meta.description = "shot-scraper pointed at the store's browsers";
+          };
+
+          # What the systemd units run. A package rather than a script inlined
+          # in the module, so the unit's PATH is the one the VM test exercises.
+          append = pkgs.writeShellApplication {
+            name = "readinglist-append";
+            runtimeInputs = [
+              readinglist
+              pkgs.bash
+              pkgs.coreutils
+              pkgs.git
+              pkgs.jq
+              pkgs.openssh
+              pkgs.rsync
+              pkgs.sqlite-utils
+              pkgs.util-linux
+            ];
+            text = builtins.readFile ./nix/append.sh;
+            meta.description = "record an article, then rebuild and publish the list";
+          };
+
+          # Enough of a checkout for the VM test to clone, append to and push.
+          # The CSV is deliberately absent: `readingList add` writes the header
+          # itself, so seeding one would hide a regression in that path.
+          testSeed = pkgs.runCommand "readinglist-seed" { } ''
+            mkdir -p $out/.site/css
+            cp ${./run.sh} $out/run.sh
+            cp ${./.site/css/ghpages.css} $out/.site/css/ghpages.css
+          '';
+        }
+      );
+
+      nixosModules.readinglist = import ./nix/module.nix { self = inputs.self; };
+      nixosModules.default = inputs.self.nixosModules.readinglist;
+
+      checks = eachSystem (
+        system:
+        let
+          pkgs = pkgsFor.${system};
+        in
+        {
+          inherit (inputs.self.packages.${system})
+            readinglist
+            database
+            append
+            shot-scraper
+            ;
+        }
+        # Keyed off the system string rather than `pkgs.stdenv`, so listing the
+        # outputs does not have to instantiate a nixpkgs for darwin.
+        // lib.optionalAttrs (lib.hasSuffix "-linux" system) {
+          # Drives the real units, so the append's PATH, locking and publish
+          # steps are exercised rather than the builder's. No network: the
+          # screenshot tool is stubbed, and the Hacker News lookup inside
+          # `readingList add` already tolerates failing.
+          endpoint = pkgs.testers.runNixOSTest {
+            name = "readinglist-endpoint";
+
+            nodes.machine = {
+              imports = [ inputs.self.nixosModules.readinglist ];
+
+              environment.systemPackages = [
+                pkgs.curl
+                pkgs.git
+                pkgs.sqlite
+              ];
+
+              services.readinglist = {
+                enable = true;
+                user = "root";
+                address = "127.0.0.1";
+                remote = "/srv/archive.git";
+                publishDB = "/srv/datasette/readingList.db";
+                publishSite = "/srv/site";
+                # Started by the test, not by the clock.
+                reconcileInterval = null;
+
+                shotScraper = pkgs.writeShellApplication {
+                  name = "shot-scraper";
+                  runtimeInputs = [ pkgs.coreutils ];
+                  text = ''
+                    # Mimics both calling conventions: `shot-scraper URL -o
+                    # out.png` and `shot-scraper pdf URL -o out.pdf`.
+                    out=""
+                    while [ $# -gt 0 ]; do
+                      case "$1" in
+                      -o)
+                        out=$2
+                        shift 2
+                        ;;
+                      *) shift ;;
+                      esac
+                    done
+                    [ -n "$out" ] || exit 1
+                    printf 'stub' >"$out"
+                  '';
+                };
+              };
+            };
+
+            testScript = ''
+              machine.wait_for_unit("multi-user.target")
+
+              machine.succeed(
+                  "mkdir -p /srv/seed",
+                  "cp -r ${inputs.self.packages.${system}.testSeed}/. /srv/seed/",
+                  "chmod -R u+w /srv/seed",
+                  "git -C /srv/seed init -q -b main",
+                  "git -C /srv/seed add -A",
+                  "git -C /srv/seed -c user.name=t -c user.email=t@t commit -qm seed",
+                  "git clone -q --bare /srv/seed /srv/archive.git",
+              )
+
+              machine.wait_for_unit("readinglist.service")
+              machine.wait_for_open_port(8108)
+              machine.succeed("curl -sS --fail http://127.0.0.1:8108/healthz")
+
+              with subtest("a GET cannot append"):
+                  machine.succeed(
+                      "curl -sS -o /dev/null -w '%{http_code}' "
+                      "http://127.0.0.1:8108/add | grep -q 405"
+                  )
+
+              with subtest("an entry with no URL is refused"):
+                  machine.succeed(
+                      "curl -sS -o /dev/null -w '%{http_code}' -X POST "
+                      "-H 'Content-Type: application/json' -d '{\"title\":\"no url\"}' "
+                      "http://127.0.0.1:8108/add | grep -q 400"
+                  )
+
+              with subtest("an append is recorded, pushed and published"):
+                  machine.succeed(
+                      "curl -sS --fail --max-time 300 -X POST "
+                      "-H 'Content-Type: application/json' "
+                      "-d '{\"url\":\"https://example.com/a\",\"title\":\"An article\"}' "
+                      "http://127.0.0.1:8108/add"
+                  )
+
+                  tracked = machine.succeed("git -C /srv/archive.git ls-tree -r --name-only main")
+                  assert "readingList.csv" in tracked, tracked
+                  assert ".site/index.html" in tracked, tracked
+                  # The archive keeps the PDF; only the screenshot is served.
+                  assert len([f for f in tracked.split("\n") if f.endswith(".pdf")]) == 1, tracked
+
+                  rows = machine.succeed("sqlite3 /srv/datasette/readingList.db 'select url from read'")
+                  assert rows.strip() == "https://example.com/a", rows
+
+                  published = machine.succeed("ls /srv/site /srv/site/css")
+                  assert "index.html" in published, published
+                  assert "ghpages.css" in published, published
+                  assert ".png" in published, published
+                  # 2.2G of PDFs that nothing links to stay in git.
+                  assert ".pdf" not in published, published
+
+              with subtest("a form-encoded append works too"):
+                  machine.succeed(
+                      "curl -sS --fail --max-time 300 -X POST "
+                      "--data-urlencode url=https://example.com/b "
+                      "--data-urlencode title=Another "
+                      "http://127.0.0.1:8108/add"
+                  )
+                  rows = machine.succeed("sqlite3 /srv/datasette/readingList.db 'select count(*) from read'")
+                  assert rows.strip() == "2", rows
+
+              with subtest("a republish appends nothing and still succeeds"):
+                  machine.succeed("systemctl start readinglist-publish.service")
+                  rows = machine.succeed("sqlite3 /srv/datasette/readingList.db 'select count(*) from read'")
+                  assert rows.strip() == "2", rows
+
+              with subtest("a republish repairs an emptied publish directory"):
+                  machine.succeed("rm -rf /srv/site")
+                  machine.succeed("systemctl start readinglist-publish.service")
+                  machine.succeed("test -s /srv/site/index.html")
+                  machine.succeed("test -s /srv/site/css/ghpages.css")
+            '';
+          };
+        }
+      );
+
+      devShells = eachSystem (
+        system:
+        let
+          pkgs = pkgsFor.${system};
+        in
+        {
+          default = pkgs.mkShell {
+            packages = [
+              inputs.self.packages.${system}.readinglist
+              inputs.self.packages.${system}.shot-scraper
+            ]
+            ++ (with pkgs; [
+              git
+              go
+              jq
+              rsync
+              sqlite-utils
+            ]);
+          };
+        }
+      );
     };
 }

@@ -9,16 +9,28 @@ A datasette instance also exists at https://api-read.jamesst.one/. This allows f
 
 ## Adding an entry
 
-Appends are driven by the `Append article to reading list` workflow. Forgejo has
-no `repository_dispatch`, so the button triggers `workflow_dispatch` instead:
+Appends are driven by a NixOS module in this repo (`nixos/features/readinglist.nix`
+in config-nix-channel enables it), not by CI. `services.readinglist` runs an
+endpoint on hermanii that a phone shortcut POSTs to:
 
 ```
-POST /api/v1/repos/james/readingList/actions/workflows/append.yml/dispatches
-{"ref": "main", "inputs": {"url": "…", "title": "…", "description": "…", "image": "…"}}
+POST http://hermanii:8108/add
+{"url": "…", "title": "…", "description": "…", "image": "…"}
 ```
 
-The workflow archives a screenshot and a PDF of the URL under `.site/`, appends
-a row to `readingList.csv` and regenerates `.site/index.html`.
+A form body works equally well. There is no token: the listener is reachable
+only over the tailnet, which is the whole reason it could replace a forge
+workflow and its API secret.
+
+One POST does everything the three retired workflows did — archives a
+screenshot and a PDF of the URL under `.site/`, appends a row to
+`readingList.csv`, regenerates `.site/index.html`, pushes, then rebuilds
+`readingList.db` and publishes both the database and the page. It answers only
+once all of that has succeeded.
+
+`readinglist-publish.timer` runs the same thing daily with no article to add,
+which is what picks up a row committed from elsewhere and what repairs a
+publish directory that was emptied.
 
 ## Locally
 
