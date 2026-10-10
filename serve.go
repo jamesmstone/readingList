@@ -11,6 +11,7 @@ import (
 	"os/exec"
 	"strconv"
 	"sync"
+	"syscall"
 	"time"
 
 	"github.com/jamesmstone/readingList/transport"
@@ -63,6 +64,13 @@ func (s *server) add(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("appending %s (%s)", in.URL, in.Title)
 	cmd := exec.CommandContext(ctx, s.append)
+	// The script's own group, killed whole on timeout: killing only the shell
+	// releases its lock while the git push or rsync it started carries on
+	// against the checkout the next append is about to take.
+	cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
+	cmd.Cancel = func() error {
+		return syscall.Kill(-cmd.Process.Pid, syscall.SIGKILL)
+	}
 	cmd.Env = append(os.Environ(),
 		"RL_URL="+in.URL,
 		"RL_TITLE="+in.Title,
@@ -122,9 +130,10 @@ func Serve() error {
 		return fmt.Errorf("set RL_APPEND_CMD to the append script")
 	}
 
-	// Generous, and deliberately so: an append shoots a screenshot and a PDF of
-	// a page that may be slow, then pushes and rebuilds the database.
-	timeout := 10 * time.Minute
+	// A backstop, not a budget: it has to outlast the script's own worst case
+	// -- half an hour queued behind a republish, then the first clone of a
+	// >2GiB archive -- or it kills an append that was about to succeed.
+	timeout := 3 * time.Hour
 	if v := os.Getenv("RL_TIMEOUT_SECONDS"); v != "" {
 		secs, err := strconv.Atoi(v)
 		if err != nil {
