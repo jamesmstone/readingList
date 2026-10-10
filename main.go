@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"time"
@@ -22,8 +21,8 @@ type readingListEntry struct {
 }
 
 func run() error {
-	if len(os.Args) == 1 || !(os.Args[1] == "add" || os.Args[1] == "generateSite") {
-		return fmt.Errorf("usage: %s [add|generateSite]", os.Args[0])
+	if len(os.Args) == 1 {
+		return fmt.Errorf("usage: %s [add|generateSite|serve]", os.Args[0])
 	}
 
 	var f func() error
@@ -33,8 +32,10 @@ func run() error {
 		f = AddRowToCSV
 	case "generateSite":
 		f = GenerateSite
+	case "serve":
+		f = Serve
 	default:
-		return errors.New("unreachable")
+		return fmt.Errorf("usage: %s [add|generateSite|serve]", os.Args[0])
 	}
 
 	return f()

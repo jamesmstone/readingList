@@ -15,6 +15,7 @@ buildGoModule {
       ./main.go
       ./manager.go
       ./generator.go
+      ./serve.go
       ./transport
     ];
   };
