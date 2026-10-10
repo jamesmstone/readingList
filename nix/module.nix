@@ -17,6 +17,11 @@ let
   // lib.optionalAttrs (cfg.publishDB != null) { RL_PUBLISH_DB = cfg.publishDB; }
   // lib.optionalAttrs (cfg.publishSite != null) { RL_PUBLISH_SITE = cfg.publishSite; };
 
+  # The script's worst case, in seconds: half an hour waiting for the lock, an
+  # hour for the first clone, then the pushes and the screenshots. Both units
+  # are held to it, so neither kills a run the script would have finished.
+  budget = 3 * 60 * 60;
+
   # Shared by the server and the reconcile timer: both drive the same script
   # over the same checkout, and the push needs the user's own ssh key, which is
   # why neither sets ProtectHome.
@@ -141,6 +146,7 @@ in
       environment = env // {
         RL_APPEND_CMD = lib.getExe cfg.package;
         RL_LISTEN = "${cfg.address}:${toString cfg.port}";
+        RL_TIMEOUT_SECONDS = toString budget;
       };
 
       serviceConfig = hardening // {
@@ -160,6 +166,9 @@ in
       serviceConfig = hardening // {
         Type = "oneshot";
         ExecStart = "${lib.getExe cfg.package} publish";
+        # A oneshot is still starting for as long as it runs, so systemd's
+        # 90s default would kill nearly every republish.
+        TimeoutStartSec = budget;
       };
     };
 

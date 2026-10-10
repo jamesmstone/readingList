@@ -128,6 +128,16 @@
                   name = "shot-scraper";
                   runtimeInputs = [ pkgs.coreutils ];
                   text = ''
+                    # A page that never loads, for the subtest that times
+                    # an append out. Backgrounded so the process the server
+                    # has to kill is a grandchild of the script, not a child.
+                    case "$*" in
+                    *example.com/slow*)
+                      sleep 600 &
+                      wait
+                      ;;
+                    esac
+
                     # Mimics both calling conventions: `shot-scraper URL -o
                     # out.png` and `shot-scraper pdf URL -o out.pdf`.
                     out=""
@@ -148,6 +158,8 @@
             };
 
             testScript = ''
+              from datetime import timedelta
+
               machine.wait_for_unit("multi-user.target")
 
               machine.succeed(
@@ -221,6 +233,55 @@
                   machine.succeed("systemctl start readinglist-publish.service")
                   machine.succeed("test -s /srv/site/index.html")
                   machine.succeed("test -s /srv/site/css/ghpages.css")
+
+              with subtest("both units outlast the script's own worst case"):
+                  timeout = machine.succeed(
+                      "systemctl show -P TimeoutStartUSec readinglist-publish.service"
+                  )
+                  assert timeout.strip() == "3h", timeout
+                  env = machine.succeed("systemctl show -P Environment readinglist.service")
+                  assert "RL_TIMEOUT_SECONDS=10800" in env, env
+
+              with subtest("a timed-out append is killed whole"):
+                  machine.succeed(
+                      "mkdir -p /run/systemd/system/readinglist.service.d",
+                      "printf '[Service]\\nEnvironment=RL_TIMEOUT_SECONDS=5\\n' "
+                      ">/run/systemd/system/readinglist.service.d/timeout.conf",
+                      "systemctl daemon-reload",
+                      "systemctl restart readinglist.service",
+                  )
+                  machine.wait_for_open_port(8108)
+                  machine.succeed(
+                      "curl -sS -o /dev/null -w '%{http_code}' --max-time 60 -X POST "
+                      "-H 'Content-Type: application/json' "
+                      "-d '{\"url\":\"https://example.com/slow\",\"title\":\"Slow\"}' "
+                      "http://127.0.0.1:8108/add | grep -q 500"
+                  )
+                  # Anchored, so it cannot match the shell running pgrep.
+                  machine.wait_until_fails("pgrep -f '^sleep 600$'", timeout=timedelta(seconds=10))
+
+                  machine.succeed(
+                      "rm -r /run/systemd/system/readinglist.service.d",
+                      "systemctl daemon-reload",
+                      "systemctl restart readinglist.service",
+                  )
+                  machine.wait_for_open_port(8108)
+
+              with subtest("an interrupted clone is recovered, not wedged on"):
+                  # What a clone killed before it fetched leaves behind: a
+                  # .git with no HEAD, both in place and cloned aside.
+                  machine.succeed(
+                      "rm -rf /var/lib/readinglist/repo",
+                      "git init -q /var/lib/readinglist/repo",
+                      "git init -q /var/lib/readinglist/repo.tmp",
+                  )
+                  machine.succeed("systemctl start readinglist-publish.service")
+                  head = machine.succeed("git -C /var/lib/readinglist/repo rev-parse HEAD")
+                  main = machine.succeed("git -C /srv/archive.git rev-parse main")
+                  assert head == main, (head, main)
+                  machine.fail("test -e /var/lib/readinglist/repo.tmp")
+                  rows = machine.succeed("sqlite3 /srv/datasette/readingList.db 'select count(*) from read'")
+                  assert rows.strip() == "2", rows
             '';
           };
         }

@@ -30,6 +30,10 @@ export GIT_SSH_COMMAND="ssh -o BatchMode=yes -o ConnectTimeout=10"
 export GIT_CONFIG_GLOBAL=/dev/null
 export GIT_CONFIG_SYSTEM=/dev/null
 
+# Every `timeout` below is --foreground. Without it timeout moves its command
+# into a process group of its own, out of reach of the server killing this
+# script's group, and a killed append would leave a git push running.
+
 mkdir -p "$RL_STATE"
 
 # The HTTP server and the reconcile timer are separate processes sharing one
@@ -37,10 +41,15 @@ mkdir -p "$RL_STATE"
 exec {lock}>"$RL_STATE/.lock"
 flock -w 1800 "$lock"
 
-if [ ! -d "$repo/.git" ]; then
+# A HEAD, not a .git: git clone creates .git before it has fetched anything, so
+# a run killed mid-clone would otherwise leave a checkout that fails forever.
+if ! git --git-dir="$repo/.git" rev-parse --verify -q HEAD >/dev/null 2>&1; then
+  rm -rf "$repo" "$repo.tmp"
   # The archive carries a PDF of every article ever read, so this is >2GiB and
-  # only ever paid once.
-  timeout 60m git clone "$RL_REMOTE" "$repo"
+  # only ever paid once. Cloned aside and renamed so that $repo only ever
+  # exists complete.
+  timeout --foreground 60m git clone "$RL_REMOTE" "$repo.tmp"
+  mv "$repo.tmp" "$repo"
 fi
 
 cd "$repo"
@@ -48,7 +57,7 @@ cd "$repo"
 git config user.name "Automated"
 git config user.email "actions@jamesst.one"
 
-timeout 10m git fetch --prune origin
+timeout --foreground 10m git fetch --prune origin
 
 # Never rebase and never discard: the CSV row and the screenshot are the only
 # copies of that article, and nothing else writes this archive, so a real
@@ -58,7 +67,7 @@ if ! git merge --ff-only origin/main >/dev/null 2>&1; then
   parked="diverged/$(date -u +%Y%m%dT%H%M%SZ)"
   echo "WARNING: diverged from origin/main; parking local work on $parked" >&2
   git branch "$parked"
-  timeout 5m git push origin "$parked" || true
+  timeout --foreground 5m git push origin "$parked" || true
   git reset --hard origin/main
 fi
 # Scoped away from .site: a run killed between the fetch and the commit leaves
@@ -79,11 +88,11 @@ if [ "$mode" = append ]; then
   # the warning names what to re-shoot. They are bounded because a page that
   # never finishes loading would otherwise hold the lock until the HTTP
   # caller's own timeout.
-  if ! timeout 4m "$shotScraper" "$RL_URL" --width 400 --height 400 -o "$siteDir/$png"; then
+  if ! timeout --foreground 4m "$shotScraper" "$RL_URL" --width 400 --height 400 -o "$siteDir/$png"; then
     echo "WARNING: no screenshot for $RL_URL" >&2
     png=""
   fi
-  if ! timeout 4m "$shotScraper" pdf "$RL_URL" -o "$siteDir/$pdf"; then
+  if ! timeout --foreground 4m "$shotScraper" pdf "$RL_URL" -o "$siteDir/$pdf"; then
     echo "WARNING: no PDF for $RL_URL" >&2
     pdf=""
   fi
@@ -115,7 +124,7 @@ fi
 # Unconditional, and outside the branch above: a run whose push failed leaves a
 # commit behind that the next one has to carry, and by then its working tree is
 # clean again.
-timeout 30m git push origin HEAD:main
+timeout --foreground 30m git push origin HEAD:main
 
 # The checkout's own recipe, so the data and the schema built from it always
 # version together.
