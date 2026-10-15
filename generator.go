@@ -11,9 +11,9 @@ import (
 	"time"
 
 	"github.com/jszwec/csvutil"
-	g "github.com/maragudk/gomponents"
-	c "github.com/maragudk/gomponents/components"
-	. "github.com/maragudk/gomponents/html"
+	g "maragu.dev/gomponents"
+	c "maragu.dev/gomponents/components"
+	. "maragu.dev/gomponents/html"
 )
 
 const dateFormat = "2006-01-02"
@@ -108,13 +108,7 @@ func makeListHTML(groups []*entryGroup) g.Node {
 
 	parts := []g.Node{
 		Br(),
-		Span(g.Text("Jump to :: "), g.Group(g.Map(len(subsections), func(i int) g.Node {
-			n := subsections[i]
-			if i != len(subsections)-1 {
-				n = g.Group([]g.Node{n, g.Text(" :: ")})
-			}
-			return n
-		}))),
+		Span(g.Text("Jump to :: "), joinNodes(subsections, g.Text(" :: "))),
 	}
 
 	for _, group := range groups {
@@ -223,4 +217,15 @@ func GenerateSite() error {
 	_ = os.Mkdir(outputDir, 0777)
 
 	return ioutil.WriteFile(outputDir+"/index.html", outputContent, 0644)
+}
+
+func joinNodes(nodes []g.Node, sep g.Node) g.Group {
+	var joined g.Group
+	for i, n := range nodes {
+		if i > 0 {
+			joined = append(joined, sep)
+		}
+		joined = append(joined, n)
+	}
+	return joined
 }
