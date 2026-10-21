@@ -14,6 +14,9 @@ let
     RL_STATE = cfg.stateDir;
     RL_SHOT_SCRAPER = lib.getExe cfg.shotScraper;
   }
+  // lib.optionalAttrs (cfg.redirectOrigins != [ ]) {
+    RL_REDIRECT_ORIGINS = lib.concatStringsSep "," cfg.redirectOrigins;
+  }
   // lib.optionalAttrs (cfg.publishDB != null) { RL_PUBLISH_DB = cfg.publishDB; }
   // lib.optionalAttrs (cfg.publishSite != null) { RL_PUBLISH_SITE = cfg.publishSite; };
 
@@ -102,6 +105,18 @@ in
       '';
     };
 
+    redirectOrigins = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = [ "https://read.jamesst.one" ];
+      description = ''
+        Origins a browser form post to `/add` may be sent back to afterwards,
+        taken from its Referer. The first is where a post with no usable Referer
+        lands. A Referer from anywhere else is ignored, so this cannot be an
+        open redirect.
+      '';
+    };
+
     publishDB = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
@@ -117,9 +132,8 @@ in
       default = null;
       example = "/var/lib/readinglist-site";
       description = ''
-        Where to publish the page and the screenshots. The PDFs are never
-        published: they are 2.2G against the screenshots' 102M and nothing
-        links to them.
+        Where to publish the page, the screenshots and the PDFs. The page links
+        every PDF, so the first publish copies all 2.2G of them.
       '';
     };
 

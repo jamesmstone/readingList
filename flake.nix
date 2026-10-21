@@ -200,7 +200,6 @@
                   tracked = machine.succeed("git -C /srv/archive.git ls-tree -r --name-only main")
                   assert "readingList.csv" in tracked, tracked
                   assert ".site/index.html" in tracked, tracked
-                  # The archive keeps the PDF; only the screenshot is served.
                   assert len([f for f in tracked.split("\n") if f.endswith(".pdf")]) == 1, tracked
 
                   rows = machine.succeed("sqlite3 /srv/datasette/readingList.db 'select url from read'")
@@ -210,8 +209,12 @@
                   assert "index.html" in published, published
                   assert "ghpages.css" in published, published
                   assert ".png" in published, published
-                  # 2.2G of PDFs that nothing links to stay in git.
-                  assert ".pdf" not in published, published
+                  # The index links every PDF, so each must be served.
+                  assert ".pdf" in published, published
+                  machine.succeed(
+                      "grep -o 'href=\"[^\"]*\\.pdf\"' /srv/site/index.html | cut -d'\"' -f2 "
+                      "| while read -r f; do test -s \"/srv/site/$f\" || exit 1; done"
+                  )
 
               with subtest("a form-encoded append works too"):
                   machine.succeed(

@@ -140,14 +140,11 @@ fi
 
 if [ -n "$publishSite" ]; then
   mkdir -p "$publishSite"
-  # Deliberately not the whole of .site: the PDFs are 2.2G against the
-  # screenshots' 102M and nothing links to them, so they stay an archive in git
-  # rather than bytes on a web server.
-  #
-  # --ignore-existing for the screenshots: a name carries the timestamp it was
-  # shot at, so it is never rewritten once published and there are 1700-odd of
-  # them. index.html is the only file that ever changes.
-  rsync -a --ignore-existing --include='*.png' --exclude='*' "$siteDir/" "$publishSite/"
+  # --ignore-existing: a name carries the timestamp it was made at, so a
+  # screenshot or PDF is never rewritten once published and there are 1700-odd
+  # of each. The PDFs must go too, since the index links every one; index.html
+  # is the only file that ever changes.
+  rsync -a --ignore-existing --include='*.png' --include='*.pdf' --exclude='*' "$siteDir/" "$publishSite/"
   rsync -a --delete "$siteDir/css/" "$publishSite/css/"
   rsync -a "$siteDir/index.html" "$publishSite/index.html"
 fi
