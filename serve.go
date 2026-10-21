@@ -7,9 +7,12 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"net/url"
 	"os"
 	"os/exec"
+	"regexp"
 	"strconv"
+	"strings"
 	"sync"
 	"syscall"
 	"time"
@@ -27,6 +30,11 @@ type server struct {
 	mu      sync.Mutex
 	append  string
 	timeout time.Duration
+	// Origins besides this listener's own that a browser may be sent back to,
+	// e.g. "https://read.jamesst.one": the page that submits here is usually
+	// served from somewhere else. The first is also where a post with no usable
+	// Referer lands.
+	origins []string
 }
 
 type addResponse struct {
@@ -88,8 +96,55 @@ func (s *server) add(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Printf("appended %s", in.URL)
+	// Only a browser form post is sent back; the phone shortcut's JSON caller
+	// is reading the response body.
+	if isForm(r) {
+		http.Redirect(w, r, s.returnTo(r), http.StatusSeeOther)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(addResponse{URL: in.URL, Title: in.Title})
+}
+
+func isForm(r *http.Request) bool {
+	return r.Header.Get("Content-Type") == "application/x-www-form-urlencoded"
+}
+
+// A fragment names an element id on the page; anything else is refused rather
+// than escaped, so a form field cannot smuggle in a second URL component.
+var fragmentRE = regexp.MustCompile(`^[A-Za-z0-9_.:-]{1,100}$`)
+
+// returnTo is where to send the browser after a successful append: the page it
+// came from, restored to the position the form asked for.
+//
+// The Referer is attacker-controlled, so it is only ever matched against the
+// known origins and the Location is rebuilt from the matched origin plus
+// the Referer's path and query. Whatever else the Referer carries -- userinfo,
+// a lookalike host, a "//host" path -- cannot reach the Location.
+func (s *server) returnTo(r *http.Request) string {
+	loc := "/"
+	if len(s.origins) > 0 {
+		loc = s.origins[0] + "/"
+	}
+
+	if ref, err := url.Parse(r.Referer()); err == nil && ref.Host != "" {
+		for _, o := range append([]string{"http://" + r.Host}, s.origins...) {
+			if ref.Scheme+"://"+ref.Host == o && strings.HasPrefix(ref.Path, "/") && !strings.HasPrefix(ref.Path, "//") {
+				loc = o + ref.EscapedPath()
+				if ref.RawQuery != "" {
+					loc += "?" + ref.RawQuery
+				}
+				break
+			}
+		}
+	}
+
+	// Browsers strip the fragment from the Referer, so the only way the
+	// position survives the round trip is the form carrying it.
+	if f := r.PostForm.Get("fragment"); fragmentRE.MatchString(f) {
+		loc += "#" + f
+	}
+	return loc
 }
 
 // Accepts either a JSON body or a form, so the caller can be whichever of the
@@ -97,7 +152,7 @@ func (s *server) add(w http.ResponseWriter, r *http.Request) {
 func decodeInputs(r *http.Request) (*transport.Inputs, error) {
 	in := new(transport.Inputs)
 
-	if ct := r.Header.Get("Content-Type"); ct == "application/x-www-form-urlencoded" {
+	if isForm(r) {
 		if err := r.ParseForm(); err != nil {
 			return nil, err
 		}
@@ -142,7 +197,14 @@ func Serve() error {
 		timeout = time.Duration(secs) * time.Second
 	}
 
-	s := &server{append: appendCmd, timeout: timeout}
+	var origins []string
+	for _, o := range strings.Split(os.Getenv("RL_REDIRECT_ORIGINS"), ",") {
+		if o = strings.TrimRight(strings.TrimSpace(o), "/"); o != "" {
+			origins = append(origins, o)
+		}
+	}
+
+	s := &server{append: appendCmd, timeout: timeout, origins: origins}
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/add", s.add)

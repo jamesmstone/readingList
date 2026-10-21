@@ -18,7 +18,11 @@ POST http://hermanii:8108/add
 {"url": "…", "title": "…", "description": "…", "image": "…"}
 ```
 
-A form body works equally well. There is no token: the listener is reachable
+A form body works equally well, and answers with a `303` back to the page the
+browser came from (its `Referer`, if it is one of the origins in
+`services.readinglist.redirectOrigins` or this listener itself; otherwise the
+first of those origins). A `fragment` form field adds `#fragment` to restore the
+position on the page. There is no token: the listener is reachable
 only over the tailnet, which is the whole reason it could replace a forge
 workflow and its API secret.
 

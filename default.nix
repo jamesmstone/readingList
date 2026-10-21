@@ -16,6 +16,7 @@ buildGoModule {
       ./manager.go
       ./generator.go
       ./serve.go
+      ./serve_test.go
       ./transport
     ];
   };
