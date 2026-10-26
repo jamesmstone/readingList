@@ -21,7 +21,7 @@ buildGoModule {
     ];
   };
 
-  vendorHash = "sha256-yFKb/gvDgnjTpst/OoZcux3dBiCjtFwVXqIxMLu8yRs=";
+  vendorHash = "sha256-g1EQBqJmlde7Dz+hXpZeRDGe+mEjkVuh+/QCyth8B44=";
 
   meta = {
     description = "Appends to readingList.csv and renders the static reading list";
