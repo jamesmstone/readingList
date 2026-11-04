@@ -9,6 +9,10 @@ on:
 env:
   NIX_CONFIG: "accept-flake-config = true"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   flake-check:
     runs-on: native
