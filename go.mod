@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/go-playground/validator v9.31.0+incompatible
-	github.com/jszwec/csvutil v1.10.1
+	github.com/jszwec/csvutil v1.10.2
 	maragu.dev/gomponents v1.4.0
 )
 
